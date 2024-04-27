@@ -21,7 +21,7 @@ if (!$firstTenCategories) {
 	sort($arrayCategories);
 
 	// Mostrar el enlace "Mostrar todas las categorías":
-	echo '<a href="mostrar_todas_categorias.php">Mostrar todas las categorías</a>';
+	echo '<a href="rss_get_categories">Mostrar todas las categorías</a>';
 
 	// Si no hay un error, se llama a la vista:
 	require_once('../views/rss_categories_reader.php');
