@@ -163,7 +163,7 @@
 			}
 		};
 
-		xmlhttp.open("GET", "controllers/rss_get_categories.php", true);
+		xmlhttp.open("GET", "controllers/rss_get_ten_categories.php", true);
 		xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 		xmlhttp.send();
 	}
