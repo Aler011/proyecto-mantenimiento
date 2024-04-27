@@ -71,6 +71,21 @@ class rssReaderModel
 		return $this->items;
 	}
 
+	/**
+	 * Devolver solamente diez categorías a la vista.
+	 * Fecha: 27/04/2024.
+	 * Autor: Esteban Alfonso.
+	 */
+
+	public function get_ten_categories(){
+		$sql = "SELECT FROM * feed.categories WHERE feed.categories != '' LIMIT 10";
+		$query = $this->db->query($sql);
+		while ($rows = $query->fetch_assoc()) {
+			$this->items[] = $rows;
+		}
+		return $this->items;
+	}
+
 	// Almacena en la BD los items:
 	public function set_item($title, $date, $description, $permalink, $categories, $image) {
 		$sql = "INSERT INTO feed (title, date, description, permalink, categories, image)
