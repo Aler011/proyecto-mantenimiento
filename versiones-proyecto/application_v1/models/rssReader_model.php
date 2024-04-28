@@ -78,7 +78,7 @@ class rssReaderModel
 	 */
 
 	public function get_ten_categories(){
-		$sql = "SELECT DISTINCT categories FROM feed WHERE categories IS NOT NULL AND categories != '' LIMIT 5;";
+		$sql = "SELECT DISTINCT categories FROM feed WHERE categories IS NOT NULL AND categories != '' LIMIT 10;";
 		$query = $this->db->query($sql);
 		while ($rows = $query->fetch_assoc()) {
 			$this->items[] = $rows;
