@@ -34,3 +34,6 @@
 			break;
 		}
 	}
+
+	// Mostrar el enlace "Mostrar todas las categorías":
+	echo '<a href="../Categories.php">Mostrar todas las categorías</a>';

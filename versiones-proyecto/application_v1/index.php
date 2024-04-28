@@ -146,8 +146,7 @@
 				xmlhttp.readyState === XMLHttpRequest.DONE &&
 				xmlhttp.status === 200
 			) {
-				// Se valida que se haya obtenido una respuesta y el código HTTP sea 200 'OK':
-				document.getElementById("link-categories").innerHTML = xmlhttp.responseText;
+				document.getElementById("link-categories").innerHTML += xmlhttp.responseText;
 			}
 		};
 
