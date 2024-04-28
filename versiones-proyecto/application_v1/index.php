@@ -38,7 +38,7 @@
 					// Se valida que se haya obtenido una respuesta y el código HTTP sea 200 'OK':
 					document.getElementById("container").innerHTML = xmlhttp.responseText;
 					if (url === "controllers/rss_update.php") {
-						getCategories();
+						getTenCategories();
 					}
 				}
 			};
@@ -136,7 +136,7 @@
 		xmlhttp.send();
 	}
 
-	function getCategories() {
+	function getTenCategories() {
 		let inputTextSearch = document.getElementById("searchBox").value;
 		let selectedItem = document.getElementById("sortSelect").value;
 		const xmlhttp = new XMLHttpRequest();
@@ -203,7 +203,7 @@
 						</p>
 						<div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
 							<a class="btn btn-primary btn-lg px-4 me-sm-3" aria-label="Mostrar"
-								onclick="loadPhp('controllers/rss_reader.php'); resetQuery(); getCategories();">Mostrar</a>
+								onclick="loadPhp('controllers/rss_reader.php'); resetQuery(); getTenCategories();">Mostrar</a>
 							<a class="btn btn-outline-light btn-lg px-4" aria-label="Actualizar"
 								onclick="loadPhp('controllers/rss_update.php'); resetQuery();">Actualizar</a>
 						</div>
@@ -266,6 +266,6 @@
 </body>
 <script>
 	loadPhp('controllers/rss_reader.php');
-	getCategories();
+	getTenCategories();
 </script>
 </html>

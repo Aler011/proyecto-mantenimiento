@@ -72,13 +72,13 @@ class rssReaderModel
 	}
 
 	/**
-	 * Devolver solamente diez categorías a la vista.
+	 * Devolver solamente cinco categorías a la vista.
 	 * Fecha: 27/04/2024.
 	 * Autor: Esteban Alfonso.
 	 */
 
 	public function get_ten_categories(){
-		$sql = "SELECT FROM * feed.categories WHERE feed.categories != '' LIMIT 10";
+		$sql = "SELECT DISTINCT categories FROM feed WHERE categories IS NOT NULL AND categories != '' LIMIT 10;";
 		$query = $this->db->query($sql);
 		while ($rows = $query->fetch_assoc()) {
 			$this->items[] = $rows;
