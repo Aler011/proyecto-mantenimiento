@@ -18,22 +18,20 @@
 			}
 		}
 
-		echo "
-		<div class='card mb-4'>
-			<div style='overflow: hidden; width: 100%; padding-top: 70%; position: relative;'>
-				<img class='card-img-top' src='{$image}' alt='Image New' style='position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;' />
-			</div>
+		echo
+		"<div class='card mb-4'>
+			<a href='{$link}'><img class='card-img-top' src={$image} alt='Image New' /></a>
 			<div class='card-body'>
 				<div class='small text-muted'>{$date}</div>
 				<a href='{$link}'><h2 class='card-title cut-title h4'>{$title}</h2></a>
 				<p class='card-text cut-text'>{$description}</p>";
 				if ($categories) {
-					echo "<div class='d-flex justify-content-center'><a onclick='searchCategory(\"{$categories}\");'><div class='btn badge bg-primary bg-gradient mb-2' style='width: 200px;'>{$categories}</div></a></div>";
+					echo "<a onclick='searchCategory(\"{$categories}\");'><div class='btn badge bg-primary bg-gradient mb-2'>{$categories}</div></a>";
 				}
-		echo "
-			</div>
+		echo
+			"</div>
 			<div class='card-footer bg-transparent border-top-0'>
-				<div class='d-flex justify-content-center'><a class='btn btn-primary' href='{$link}' style='width: 100%;'>Leer más...</a></div>
+				<a class='btn btn-primary' href='{$link}'>Read more</a>
 			</div>
 		</div>";
 		if ($i == 1) {
