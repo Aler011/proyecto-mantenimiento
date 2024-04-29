@@ -90,4 +90,15 @@ class rssReaderModel
 		}
 		return false;
 	}
+        
+        public function get_items_by_category_first_letter($letter) {
+        $sql = "SELECT * FROM feed WHERE LEFT(categories, 1) = '$letter' ORDER BY date DESC;";
+  
+        $query = $this->db->query($sql);
+        while ($rows = $query->fetch_assoc()) {
+        $this->items[] = $rows;
+        }
+        return $this->items;
+ }
+        
 }
