@@ -63,7 +63,7 @@ class rssReaderModel
 	}
 
 	public function get_categories() {
-		$sql = "SELECT categories FROM feed;";
+		$sql = "SELECT DISTINCT categories FROM feed LIMIT 10;";
 		$query = $this->db->query($sql);
 		while ($rows = $query->fetch_assoc()) {
 			$this->items[] = $rows;
