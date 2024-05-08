@@ -1,0 +1,50 @@
+version: '3.1'
+
+services:
+  webserver:
+    image: mydemophpimage
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./application_v1:/var/www/html
+    environment:
+      MYSQL_DB_CONNECTION: mariadb
+      MYSQL_USER: root
+      MYSQL_PASSWORD: "hola"
+      MYSQL_DB_NAME: rssFeed
+      SITE_URL: http://localhost
+    depends_on:
+      - mariadb
+    networks:
+      - test
+  
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8080:80"
+    networks:
+      - test
+
+  mariadb:
+    image: mariadb:latest
+    restart: always
+    environment:
+      MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: "hola"
+      MYSQL_DATABASE: rssFeed
+      # Asegúrate de que no hay restricciones de host aquí, o usa '%' para desarrollo
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./application_v1/my-site.conf:/etc/apache2/sites-available/000-default.conf
+      - ./application_v1/db/sql_scripts:/docker-entrypoint-initdb.d
+    networks:
+      - test
+
+networks:
+  test:
+    external: true
+
+volumes:
+  db_data:
+    driver: local
