@@ -68,7 +68,6 @@ if (!$items) {
     echo '  </ul>';
     echo '</nav>';
 }
-?>
 /*
 	if (!isset($_COOKIE['urls'])) {
 		die;
@@ -88,3 +87,5 @@ if (!$items) {
 
 	require_once("rss_reader.php");
 */
+?>
+
