@@ -16,49 +16,55 @@
 	<script type="text/javascript">
 		let query = "";
 		let category = "";
-		function loadPhp (url) {
-			// Se reinicia la categoría:
-			window.category = "";
-			// Se instancia un objeto del tipo XMLHttpRequest:
-			const xmlhttp = new XMLHttpRequest();
 
-			// Parámetros de la petición:
-			const method = "POST";
-			const async = true;
+		function loadPhp(url) {
+    // Reiniciar la categoría si es necesario:
+    window.category = "";
 
-			// Se inicializa la petición al servidor:
-			xmlhttp.open(method, url, async);
-			xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    // Crear una instancia de XMLHttpRequest:
+    const xmlhttp = new XMLHttpRequest();
 
-			// Se ejecuta cuando la propiedad readyState se modifica:
-			xmlhttp.onreadystatechange = function () {
-				if (
-					xmlhttp.readyState === XMLHttpRequest.DONE &&
-					xmlhttp.status === 200
-				) {
-					// Se valida que se haya obtenido una respuesta y el código HTTP sea 200 'OK':
-					document.getElementById("container").innerHTML = xmlhttp.responseText;
-					if (url === "controllers/rss_update.php") {
-						getCategories();
-					}
-				}
-			};
+    // Definir parámetros de la petición:
+    const method = "POST";
+    const async = true;
 
-			// Se ejecuta cuando se recibe la petición hecha al servidor:
-			xmlhttp.onload = function () {
-				if (xmlhttp.status >= 400) {
-					console.error(
-						`Error ${xmlhttp.status}`
-					);
-					document.getElementById(
-						"container"
-					).innerHTML = `<h1 align="center">ERROR ${xmlhttp.status}</h1>`;
-				}
-			};
+    // Inicializar la petición al servidor:
+    xmlhttp.open(method, url, async);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
-			// Se envía la petición al servidor:
-			xmlhttp.send(`searchtext=${document.getElementById('searchBox').value}`);
-		};
+    // Ejecutarse cuando la propiedad readyState se modifica:
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState === XMLHttpRequest.DONE && xmlhttp.status === 200) {
+            // Validar que se haya obtenido una respuesta y el código HTTP sea 200 'OK':
+            document.getElementById("container").innerHTML = xmlhttp.responseText;
+            if (url.includes("rss_update.php")) {
+                getCategories();
+            }
+
+            // Actualizar el URL para reflejar la página actual sin recargar la página
+            if(url.includes("page=")) {
+                const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?' + new URLSearchParams(url.split('?')[1]).toString();
+                window.history.pushState({ path: newUrl }, '', newUrl);
+            }
+        }
+    };
+
+    // Manejar errores de carga:
+    xmlhttp.onerror = function () {
+        console.error(`Error en la petición a ${url}: ${xmlhttp.status}`);
+        document.getElementById("container").innerHTML = `<h1 align="center">ERROR ${xmlhttp.status}</h1>`;
+    };
+
+    // Preparar datos a enviar en la petición:
+    let params = `searchtext=${document.getElementById('searchBox').value}`;
+    if (url.includes("?")) {
+        params = "&" + params;  // Añadir params correctamente si url ya tiene query strings
+    }
+
+    // Enviar la petición al servidor:
+    xmlhttp.send(params);
+	}
+
 
 		function saveQuery(query) {
 			window.query = query;
@@ -109,33 +115,28 @@
 	}
 
 	function searchCategory(categoryString) {
-		window.query = "";
-		const xmlhttp = new XMLHttpRequest();
-		window.category = categoryString;
-		xmlhttp.onreadystatechange = function () {
-			if (
-				xmlhttp.readyState === XMLHttpRequest.DONE &&
-				xmlhttp.status === 200
-			) {
-				// Se valida que se haya obtenido una respuesta y el código HTTP sea 200 'OK':
-				document.getElementById("container").innerHTML = xmlhttp.responseText;
-			}
-		};
-		// Se ejecuta cuando se recibe la petición hecha al servidor:
-		xmlhttp.onload = function () {
-			if (xmlhttp.status >= 400) {
-				console.error(
-					`Error ${xmlhttp.status}`
-				);
-				document.getElementById(
-					"container"
-				).innerHTML = `<h1 align="center">ERROR ${xmlhttp.status}</h1>`;
-			}
-		};
-		xmlhttp.open("GET", "controllers/rss_search_category.php?category=" + categoryString, true);
-		xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-		xmlhttp.send();
-	}
+    console.log("Buscando categoría:", categoryString);  // Para depurar y ver qué categoría se está buscando
+    window.query = "";
+    window.category = categoryString;
+    const xmlhttp = new XMLHttpRequest();
+
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState === XMLHttpRequest.DONE) {
+            if (xmlhttp.status === 200) {
+                // Se valida que se haya obtenido una respuesta y el código HTTP sea 200 'OK':
+                document.getElementById("container").innerHTML = xmlhttp.responseText;
+                console.log("Carga completada con éxito.");  // Mensaje de éxito
+            } else {
+                console.error(`Error en la respuesta: ${xmlhttp.status}`);
+                document.getElementById("container").innerHTML = `<h1 align="center">ERROR ${xmlhttp.status}</h1>`;
+            }
+        }
+    };
+
+    xmlhttp.open("GET", "controllers/rss_search_category.php?category=" + encodeURIComponent(categoryString), true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp.send();
+}
 
 	function getCategories() {
 		let inputTextSearch = document.getElementById("searchBox").value;
@@ -174,20 +175,20 @@
 <body>
 	<!-- Responsive navbar-->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-		<div class="container">
-			<a class="navbar-brand" href="index.php" onclick="window.query='';">Lector de noticias RSS</a>
-			<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-				data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-				aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-			<div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-					<li class="nav-item"><a class="nav-link active" aria-current="page" href="index.php">Inicio</a></li>
-					<li class="nav-item"><a class="nav-link" href="views/feed.php">Añadir Feeds</a></li>
-					<li class="nav-item"><a class="nav-link" href="views/about.php">Acerca de</a></li>
-				</ul>
-			</div>
-		</div>
-	</nav>
+        <div class="container">
+            <a class="navbar-brand" href="index.php" onclick="loadPhp('controllers/rss_reader.php');">Lector de noticias RSS</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="index.php">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="views/feed.php">Añadir Feeds</a></li>
+                    <li class="nav-item"><a class="nav-link" href="views/about.php">Acerca de</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 	<!-- Header-->
 	<header class="bg-dark py-5">
 		<div class="container px-5">
