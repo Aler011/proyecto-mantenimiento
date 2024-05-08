@@ -146,7 +146,7 @@
 				xmlhttp.readyState === XMLHttpRequest.DONE &&
 				xmlhttp.status === 200
 			) {
-				document.getElementById("link-categories").innerHTML += xmlhttp.responseText;
+				document.getElementById("link-categories").innerHTML = xmlhttp.responseText;
 			}
 		};
 
