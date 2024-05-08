@@ -34,3 +34,5 @@
 			break;
 		}
 	}
+
+	echo '<a href="Categories.php"><b>Mostrar todas las categorías<b></a>';
